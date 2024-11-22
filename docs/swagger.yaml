@@ -1,0 +1,100 @@
+basePath: /
+definitions:
+  domain.Paging-domain_PostSummary:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/domain.PostSummary'
+        type: array
+      has_next:
+        type: boolean
+      has_prev:
+        type: boolean
+      limit:
+        type: integer
+      next_offset:
+        type: integer
+      offset:
+        type: integer
+      page_number:
+        type: integer
+      prev_offset:
+        type: integer
+      total:
+        type: integer
+      total_page:
+        type: integer
+    type: object
+  domain.Post:
+    properties:
+      content:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: integer
+      published_at:
+        type: string
+      status:
+        type: string
+      title:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  domain.PostSummary:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: integer
+      published_at:
+        type: string
+      status:
+        type: string
+      summary:
+        type: string
+      title:
+        type: string
+      updated_at:
+        type: string
+    type: object
+info:
+  contact: {}
+  description: Go Fiber Template
+  title: Go Fiber Template
+  version: "1.0"
+paths:
+  /api/v1/posts:
+    get:
+      description: get posts paging list
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Paging-domain_PostSummary'
+      summary: List posts
+      tags:
+      - posts
+  /api/v1/posts/{postId}:
+    get:
+      description: get post by id
+      parameters:
+      - description: Post ID
+        in: path
+        name: postId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Post'
+      summary: Get post by id
+      tags:
+      - posts
+swagger: "2.0"
