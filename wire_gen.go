@@ -14,10 +14,6 @@ import (
 	"go-gin-template/services"
 )
 
-import (
-	_ "go-gin-template/docs"
-)
-
 // Injectors from wire.go:
 
 func InitializeApp() (*gin.Engine, error) {
