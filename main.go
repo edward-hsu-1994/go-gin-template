@@ -33,13 +33,7 @@ func main() {
 
 		alreadySettingSwaggerHostname = true
 
-		hostname := c.Get("X-Forwarded-For")
-
-		if hostname == "" {
-			hostname = c.Hostname()
-		}
-
-		docs.SwaggerInfo.Host = hostname
+		docs.SwaggerInfo.Host = c.GetRespHeader("X-Forwarded-For", c.Hostname())
 
 		return c.Next()
 	})
