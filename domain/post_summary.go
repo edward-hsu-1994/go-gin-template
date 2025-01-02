@@ -20,10 +20,17 @@ func NewPostSummary(post *Post) *PostSummary {
 	return &PostSummary{
 		ID:          post.ID,
 		Title:       post.Title,
-		Summary:     post.Content[:200],
+		Summary:     substring(post.Content, 200),
 		CreatedAt:   post.CreatedAt,
 		UpdatedAt:   post.UpdatedAt,
 		PublishedAt: post.PublishedAt,
 		Status:      post.Status,
 	}
+}
+
+func substring(str string, length int) string {
+	if len(str) > length {
+		return str[:length]
+	}
+	return str
 }

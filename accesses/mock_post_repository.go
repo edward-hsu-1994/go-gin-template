@@ -38,7 +38,13 @@ func (mr *MockPostRepository) ListPosts(
 	offset int,
 	limit int,
 ) ([]*domain.PostSummary, error) {
-	queryResult := mockPostsList[offset : offset+limit]
+	mockPostsLen := len(mockPostsList)
+	takeEndIndex := offset + limit
+	if takeEndIndex >= mockPostsLen {
+		takeEndIndex = mockPostsLen - 1
+	}
+
+	queryResult := mockPostsList[offset:takeEndIndex]
 
 	posts := make([]*domain.PostSummary, 0)
 
