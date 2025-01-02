@@ -3,8 +3,9 @@ package main
 import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/swagger"
-	_ "go-fiber-template/docs"
+	docs "go-fiber-template/docs"
 	"go-fiber-template/helpers"
+	"strings"
 )
 
 // @title Go Fiber Template
@@ -19,6 +20,29 @@ func main() {
 		panic(err)
 	}
 
+	// Setting hostname for swagger
+	alreadySettingSwaggerHostname := false
+	app.Use(func(c *fiber.Ctx) error {
+		if alreadySettingSwaggerHostname {
+			return c.Next()
+		}
+
+		if strings.HasPrefix(c.Path(), "/swagger/") == false {
+			return c.Next()
+		}
+
+		alreadySettingSwaggerHostname = true
+
+		hostname := c.Get("X-Forwarded-For")
+
+		if hostname == "" {
+			hostname = c.Hostname()
+		}
+
+		docs.SwaggerInfo.Host = hostname
+
+		return c.Next()
+	})
 	app.Get("/swagger/*", swagger.HandlerDefault) // default
 
 	app.Use(func(c *fiber.Ctx) error {
