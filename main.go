@@ -4,8 +4,8 @@ import (
 	"github.com/gin-gonic/gin"
 	swaggerfiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
-	docs "go-fiber-template/docs"
-	"go-fiber-template/helpers"
+	docs "go-gin-template/docs"
+	"go-gin-template/helpers"
 	"strings"
 )
 

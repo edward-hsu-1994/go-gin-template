@@ -3,10 +3,10 @@ package routes
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"go-fiber-template/domain"
-	_ "go-fiber-template/domain"
-	"go-fiber-template/helpers"
-	"go-fiber-template/services"
+	"go-gin-template/domain"
+	_ "go-gin-template/domain"
+	"go-gin-template/helpers"
+	"go-gin-template/services"
 )
 
 type PostRouter struct {

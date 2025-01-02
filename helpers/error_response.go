@@ -3,7 +3,7 @@ package helpers
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/joomcode/errorx"
-	"go-fiber-template/domain"
+	"go-gin-template/domain"
 )
 
 var ErrorRootStatusMap = map[*errorx.Type]int{

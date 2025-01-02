@@ -7,9 +7,9 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/google/wire"
-	"go-fiber-template/accesses"
-	"go-fiber-template/routes"
-	"go-fiber-template/services"
+	"go-gin-template/accesses"
+	"go-gin-template/routes"
+	"go-gin-template/services"
 )
 
 func GinConfig() ([]gin.OptionFunc, error) {

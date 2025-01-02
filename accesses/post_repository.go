@@ -1,7 +1,7 @@
 package accesses
 
 import (
-	"go-fiber-template/domain"
+	"go-gin-template/domain"
 )
 
 type PostRepository interface {

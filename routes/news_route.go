@@ -2,7 +2,7 @@ package routes
 
 import (
 	"github.com/gin-gonic/gin"
-	_ "go-fiber-template/domain"
+	_ "go-gin-template/domain"
 )
 
 type NewsRouter struct {

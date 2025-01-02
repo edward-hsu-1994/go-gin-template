@@ -1,8 +1,8 @@
 package services
 
 import (
-	"go-fiber-template/accesses"
-	"go-fiber-template/domain"
+	"go-gin-template/accesses"
+	"go-gin-template/domain"
 	"math"
 )
 

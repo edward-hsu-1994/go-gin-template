@@ -2,7 +2,7 @@ package accesses
 
 import (
 	"fmt"
-	"go-fiber-template/domain"
+	"go-gin-template/domain"
 	"strconv"
 )
 
