@@ -1,15 +1,15 @@
 package main
 
 import (
-	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/swagger"
+	swaggerfiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 	_ "go-fiber-template/docs"
 	"go-fiber-template/helpers"
 )
 
-// @title Go Fiber Template
+// @title Go Gin Template
 // @version 1.0
-// @description Go Fiber Template
+// @description Go Gin Template
 // @license MIT
 // @BasePath /
 func main() {
@@ -19,18 +19,12 @@ func main() {
 		panic(err)
 	}
 
-	app.Get("/swagger/*", swagger.HandlerDefault) // default
+	app.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler)) // default
 
-	app.Use(func(c *fiber.Ctx) error {
-		err := c.Next()
-		if err != nil {
-			return helpers.ErrorResponse(c, err)
-		}
-		return err
-	})
+	app.Use(helpers.RecoveryMiddleware())
 
 	// configure routes
-	routers, err := InitialFiberRouters()
+	routers, err := InitialGinRouters()
 
 	if err != nil {
 		panic(err)
@@ -40,8 +34,8 @@ func main() {
 		router.ConfigureRoutes(app)
 	}
 
-	println("Server is running on port 3000")
-	err = app.Listen(":3000")
+	println("Server is running on port 8080")
+	err = app.Run(":8080")
 
 	if err != nil {
 		panic(err)

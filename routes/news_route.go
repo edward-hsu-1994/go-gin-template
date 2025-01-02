@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"github.com/gofiber/fiber/v2"
+	"github.com/gin-gonic/gin"
 	_ "go-fiber-template/domain"
 )
 
@@ -12,19 +12,19 @@ func NewNewsRouter() *NewsRouter {
 	return &NewsRouter{}
 }
 
-func (r *NewsRouter) ConfigureRoutes(app *fiber.App) {
+func (r *NewsRouter) ConfigureRoutes(app *gin.Engine) {
 	routes := app.Group("/api/v1/news")
 
-	routes.Get("/", ListNews)
-	routes.Get("/:newsId", GetNewsById)
+	routes.GET("/", ListNews)
+	routes.GET("/:newsId", GetNewsById)
 }
 
-func ListNews(c *fiber.Ctx) error {
-	return c.SendString("List news")
+func ListNews(c *gin.Context) {
+	c.String(200, "List news")
 }
 
-func GetNewsById(c *fiber.Ctx) error {
-	newsId := c.Params("newsId")
+func GetNewsById(c *gin.Context) {
+	newsId := c.Param("newsId")
 
-	return c.SendString("Get news by id: " + newsId)
+	c.String(200, "Get news by id: "+newsId)
 }

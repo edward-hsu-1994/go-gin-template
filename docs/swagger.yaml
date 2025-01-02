@@ -61,8 +61,8 @@ definitions:
     type: object
 info:
   contact: {}
-  description: Go Fiber Template
-  title: Go Fiber Template
+  description: Go Gin Template
+  title: Go Gin Template
   version: "1.0"
 paths:
   /api/v1/posts:

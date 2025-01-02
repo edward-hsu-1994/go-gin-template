@@ -7,7 +7,7 @@
 package main
 
 import (
-	"github.com/gofiber/fiber/v2"
+	"github.com/gin-gonic/gin"
 	"github.com/google/wire"
 	"go-fiber-template/accesses"
 	"go-fiber-template/routes"
@@ -20,39 +20,39 @@ import (
 
 // Injectors from wire.go:
 
-func InitializeApp() (*fiber.App, error) {
-	v, err := FilberConfig()
+func InitializeApp() (*gin.Engine, error) {
+	v, err := GinConfig()
 	if err != nil {
 		return nil, err
 	}
-	app := fiber.New(v...)
-	return app, nil
+	engine := gin.Default(v...)
+	return engine, nil
 }
 
-func InitialFiberRouters() ([]routes.FiberRouter, error) {
+func InitialGinRouters() ([]routes.GinRouter, error) {
 	newsRouter := routes.NewNewsRouter()
 	postRepository := accesses.NewMockPostRepository()
 	postService := services.NewPostService(postRepository)
 	postRouter := routes.NewPostRouter(postService)
-	v := AssembleFiberRouters(newsRouter, postRouter)
+	v := AssembleGinRouters(newsRouter, postRouter)
 	return v, nil
 }
 
 // wire.go:
 
-func FilberConfig() ([]fiber.Config, error) {
-	return []fiber.Config{}, nil
+func GinConfig() ([]gin.OptionFunc, error) {
+	return []gin.OptionFunc{}, nil
 }
 
 var repoSet = wire.NewSet(accesses.NewMockPostRepository)
 
 var serviceSet = wire.NewSet(services.NewPostService)
 
-var routesSet = wire.NewSet(routes.NewNewsRouter, routes.NewPostRouter, AssembleFiberRouters)
+var routesSet = wire.NewSet(routes.NewNewsRouter, routes.NewPostRouter, AssembleGinRouters)
 
-func AssembleFiberRouters(
+func AssembleGinRouters(
 	newsRouter *routes.NewsRouter,
 	postRouter *routes.PostRouter,
-) []routes.FiberRouter {
-	return []routes.FiberRouter{newsRouter, postRouter}
+) []routes.GinRouter {
+	return []routes.GinRouter{newsRouter, postRouter}
 }

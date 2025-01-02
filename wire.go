@@ -5,21 +5,21 @@
 package main
 
 import (
-	"github.com/gofiber/fiber/v2"
+	"github.com/gin-gonic/gin"
 	"github.com/google/wire"
 	"go-fiber-template/accesses"
 	"go-fiber-template/routes"
 	"go-fiber-template/services"
 )
 
-func FilberConfig() ([]fiber.Config, error) {
-	return []fiber.Config{}, nil
+func GinConfig() ([]gin.OptionFunc, error) {
+	return []gin.OptionFunc{}, nil
 }
 
-func InitializeApp() (*fiber.App, error) {
+func InitializeApp() (*gin.Engine, error) {
 	wire.Build(
-		FilberConfig,
-		fiber.New)
+		GinConfig,
+		gin.Default)
 
 	return nil, nil
 }
@@ -35,17 +35,17 @@ var serviceSet = wire.NewSet(
 var routesSet = wire.NewSet(
 	routes.NewNewsRouter,
 	routes.NewPostRouter,
-	AssembleFiberRouters,
+	AssembleGinRouters,
 )
 
-func AssembleFiberRouters(
+func AssembleGinRouters(
 	newsRouter *routes.NewsRouter,
 	postRouter *routes.PostRouter,
-) []routes.FiberRouter {
-	return []routes.FiberRouter{newsRouter, postRouter}
+) []routes.GinRouter {
+	return []routes.GinRouter{newsRouter, postRouter}
 }
 
-func InitialFiberRouters() ([]routes.FiberRouter, error) {
+func InitialGinRouters() ([]routes.GinRouter, error) {
 	wire.Build(
 		repoSet,
 		serviceSet,

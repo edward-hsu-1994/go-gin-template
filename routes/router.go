@@ -1,7 +1,7 @@
 package routes
 
-import "github.com/gofiber/fiber/v2"
+import "github.com/gin-gonic/gin"
 
-type FiberRouter interface {
-	ConfigureRoutes(app *fiber.App)
+type GinRouter interface {
+	ConfigureRoutes(app *gin.Engine)
 }

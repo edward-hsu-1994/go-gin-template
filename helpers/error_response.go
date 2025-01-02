@@ -1,7 +1,7 @@
 package helpers
 
 import (
-	"github.com/gofiber/fiber/v2"
+	"github.com/gin-gonic/gin"
 	"github.com/joomcode/errorx"
 	"go-fiber-template/domain"
 )
@@ -19,25 +19,39 @@ var ErrorStatusMap = map[*errorx.Type]int{
 	domain.ErrorInvalidPostStatus: 400,
 }
 
-func ErrorResponse(c *fiber.Ctx, err error) error {
+func RecoveryMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		defer func() {
+			if r := recover(); r != nil {
+				ErrorResponse(c, r.(error))
+				c.Abort()
+			}
+		}()
+		c.Next()
+	}
+}
+
+func ErrorResponse(c *gin.Context, err error) error {
 	if errorx.IsOfType(err, domain.ErrorRoot) {
 		errorType := errorx.GetTypeName(err)
 
 		httpStatusCode, ok := errorx.ExtractProperty(err, domain.ErrorHttpStatusProperty)
 
 		if ok {
-			return c.Status(httpStatusCode.(int)).JSON(fiber.Map{
+			c.JSON(httpStatusCode.(int), gin.H{
 				"error":   errorType,
 				"message": err.Error(),
 			})
+			return nil
 		}
 
 		ctx := c
+		responseStatusCode := 500
 
 		configStatus := false
 		for errorType, statusCode := range ErrorStatusMap {
 			if errorx.IsOfType(err, errorType) {
-				ctx = ctx.Status(statusCode)
+				responseStatusCode = statusCode
 				configStatus = true
 				break
 			}
@@ -46,20 +60,22 @@ func ErrorResponse(c *fiber.Ctx, err error) error {
 		if !configStatus {
 			for errorType, statusCode := range ErrorRootStatusMap {
 				if errorx.IsOfType(err, errorType) {
-					ctx = ctx.Status(statusCode)
+					responseStatusCode = statusCode
 					break
 				}
 			}
 		}
 
-		return ctx.JSON(fiber.Map{
+		ctx.JSON(responseStatusCode, gin.H{
 			"error":   errorType,
 			"message": err.Error(),
 		})
 	}
 
-	return c.Status(500).JSON(fiber.Map{
+	c.JSON(500, gin.H{
 		"error":   "internal_server_error",
 		"message": err.Error(),
 	})
+
+	return nil
 }

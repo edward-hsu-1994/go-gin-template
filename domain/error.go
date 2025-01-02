@@ -2,7 +2,7 @@ package domain
 
 import "github.com/joomcode/errorx"
 
-var namespace = errorx.NewNamespace("go-fiber-template")
+var namespace = errorx.NewNamespace("go-gin-template")
 
 var (
 	ErrorRoot              = errorx.NewType(namespace, "error")

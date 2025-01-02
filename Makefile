@@ -1,4 +1,4 @@
-APP_NAME := my-fiber-app
+APP_NAME := my-gin-app
 BUILD_DIR := ./build
 GO_FILES := $(shell find . -type f -name '*.go')
 

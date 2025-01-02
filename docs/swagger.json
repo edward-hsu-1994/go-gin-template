@@ -1,8 +1,8 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "Go Fiber Template",
-        "title": "Go Fiber Template",
+        "description": "Go Gin Template",
+        "title": "Go Gin Template",
         "contact": {},
         "version": "1.0"
     },

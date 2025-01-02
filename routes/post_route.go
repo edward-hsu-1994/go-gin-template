@@ -2,7 +2,7 @@ package routes
 
 import (
 	"fmt"
-	"github.com/gofiber/fiber/v2"
+	"github.com/gin-gonic/gin"
 	"go-fiber-template/domain"
 	_ "go-fiber-template/domain"
 	"go-fiber-template/helpers"
@@ -20,11 +20,11 @@ func NewPostRouter(
 	}
 }
 
-func (r *PostRouter) ConfigureRoutes(app *fiber.App) {
+func (r *PostRouter) ConfigureRoutes(app *gin.Engine) {
 	routes := app.Group("/api/v1/posts")
 
-	routes.Get("/", r.ListPosts)
-	routes.Get("/:postId", r.GetPostById)
+	routes.GET("/", r.ListPosts)
+	routes.GET("/:postId", r.GetPostById)
 }
 
 // ListPosts godoc
@@ -34,14 +34,15 @@ func (r *PostRouter) ConfigureRoutes(app *fiber.App) {
 // @Produce json
 // @Success 200 {object} domain.Paging[domain.PostSummary]
 // @Router /api/v1/posts [get]
-func (r *PostRouter) ListPosts(c *fiber.Ctx) error {
+func (r *PostRouter) ListPosts(c *gin.Context) {
 	posts, err := r._postService.ListPosts(0, 10)
 
 	if err != nil {
-		return helpers.ErrorResponse(c, err)
+		helpers.ErrorResponse(c, err)
+		return
 	}
 
-	return c.JSON(posts)
+	c.JSON(200, posts)
 }
 
 // GetPostById godoc
@@ -52,18 +53,20 @@ func (r *PostRouter) ListPosts(c *fiber.Ctx) error {
 // @Param postId path string true "Post ID"
 // @Success 200 {object} domain.Post
 // @Router /api/v1/posts/{postId} [get]
-func (r *PostRouter) GetPostById(c *fiber.Ctx) error {
-	postId := c.Params("postId")
+func (r *PostRouter) GetPostById(c *gin.Context) {
+	postId := c.Param("postId")
 
 	post, err := r._postService.GetPostById(postId)
 
 	if post == nil {
-		return domain.ErrorPostNotFound.New(fmt.Sprintf("Post with ID %s not found", postId))
+		helpers.ErrorResponse(c, domain.ErrorPostNotFound.New(fmt.Sprintf("Post with ID %s not found", postId)))
+		return
 	}
 
 	if err != nil {
-		return err
+		helpers.ErrorResponse(c, err)
+		return
 	}
 
-	return c.JSON(post)
+	c.JSON(200, post)
 }

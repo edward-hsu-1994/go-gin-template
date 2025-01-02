@@ -1,7 +1,7 @@
-﻿go-fiber-template
+﻿go-gin-template
 ======
 
-This is a Web API application template based on Fiber. This template includes Wire and Swagger, allowing you to quickly develop Web API applications.
+This is a Web API application template based on Gin. This template includes Wire and Swagger, allowing you to quickly develop Web API applications.
 
 
 ## Setup
@@ -23,12 +23,13 @@ Since this project template uses Swagger to automatically generate API documents
 go install github.com/swaggo/swag/cmd/swag@latest
 ```
 
-### Install gofiber-swagger
+### Install gin-swagger
 
-Since this project template uses the Swagger middleware of Fiber to provide Swagger UI, you need to install go-fiber-swagger before using it. You can use the following command to install go-fiber-swagger:
+Since this project template uses the Swagger middleware of Gin to provide Swagger UI, you need to install gin-swagger before using it. You can use the following command to install gin-swagger:
 
 ```bash
-go get -u github.com/gofiber/swagger
+go get -u github.com/swaggo/gin-swagger
+go get -u github.com/swaggo/files
 ```
 
 ## How dependencies injection works in this template
@@ -38,11 +39,11 @@ This project uses Wire to manage dependencies. You can use the following command
 In the wire.go file, we can see that three WireSets are defined, namely repoSet, serviceSet, routesSet,
 which respectively define the dependency relationship of the Repository layer, Service layer, and Route layer.
 
-It is worth noting that the route layer in this project defines an interface to describe the routing configuration for FiberApp. All routing configurations must implement this interface.
+It is worth noting that the route layer in this project defines an interface to describe the routing configuration for GinApp. All routing configurations must implement this interface.
 
 ```go
-type FiberRouter interface {
-	ConfigureRoutes(app *fiber.App)
+type GinRouter interface {
+	ConfigureRoutes(app *Gin.Engine)
 }
 
 
@@ -65,21 +66,21 @@ var routesSet = wire.NewSet(
 	routes.NewNewsRouter,
 	routes.NewPostRouter, // Add the Router object to the dependency injection set
 	
-	AssembleFiberRouters,
+	AssembleGinRouters,
 )
 
-// This method is used to assemble all routing configurations and return a list of FiberRouters.
-// This list will be used in main.go to configure the routes of FiberApp.
-func AssembleFiberRouters(
+// This method is used to assemble all routing configurations and return a list of GinRouters.
+// This list will be used in main.go to configure the routes of GinApp.
+func AssembleGinRouters(
 	newsRouter *routes.NewsRouter, 
-	postRouter *routes.PostRouter, // Inject the Router object into the AssembleFiberRouters method
-) []routes.FiberRouter {
-	return []routes.FiberRouter{newsRouter, postRouter}
+	postRouter *routes.PostRouter, // Inject the Router object into the AssembleGinRouters method
+) []routes.GinRouter {
+	return []routes.GinRouter{newsRouter, postRouter}
 }
 ```
 
-This AssembleFiberRouters method is used to assemble all routing configurations and return a list of FiberRouters. 
-This list will be used in main.go to configure the routes of FiberApp.
+This AssembleGinRouters method is used to assemble all routing configurations and return a list of GinRouters. 
+This list will be used in main.go to configure the routes of GinApp.
 
 The dependency injection relationship diagram of the entire project is as follows:
 
