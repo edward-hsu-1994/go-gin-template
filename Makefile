@@ -53,6 +53,12 @@ build: deps wire swag
 	@mkdir -p $(BUILD_DIR)
 	@go build -o $(BUILD_DIR)/$(APP_NAME)
 
+# Build the appliation docker image
+.PHONY: docker-build
+docker-build:
+	@echo "Building docker image..."
+	@docker build -t $(APP_NAME):latest .
+
 # Clean build artifacts
 .PHONY: clean
 clean:
