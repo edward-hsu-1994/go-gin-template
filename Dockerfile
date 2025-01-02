@@ -1,4 +1,6 @@
-﻿FROM golang:alpine as builder
+﻿FROM golang:alpine AS builder
+ARG APP_NAME=my-app
+ENV APP_NAME=${APP_NAME}
 
 RUN apk add --no-cache make
 RUN go install github.com/google/wire/cmd/wire@latest
@@ -12,13 +14,15 @@ RUN make build
 
 
 FROM alpine:latest
+ARG APP_NAME=my-app
+ENV APP_NAME=${APP_NAME}
 
 WORKDIR /app
 
 COPY --from=builder /app/build .
 
-EXPOSE 3000
+EXPOSE 8080
 
 LABEL authors="edward_hsu_1994"
 
-ENTRYPOINT ["./my-fiber-app"]
+ENTRYPOINT ["sh", "-c", "./$APP_NAME"]
