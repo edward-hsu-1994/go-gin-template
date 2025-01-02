@@ -1,4 +1,4 @@
-APP_NAME := my-gin-app
+APP_NAME ?= my-gin-app
 BUILD_DIR := ./build
 GO_FILES := $(shell find . -type f -name '*.go')
 
@@ -57,7 +57,7 @@ build: deps wire swag
 .PHONY: docker-build
 docker-build:
 	@echo "Building docker image..."
-	@docker build -t $(APP_NAME):latest .
+	@docker build --build-arg APP_NAME=$(APP_NAME) -t $(APP_NAME):latest .
 
 # Clean build artifacts
 .PHONY: clean
