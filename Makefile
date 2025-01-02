@@ -51,7 +51,7 @@ lint:
 build: deps wire swag
 	@echo "Building $(APP_NAME)..."
 	@mkdir -p $(BUILD_DIR)
-	@go build -o $(BUILD_DIR)/$(APP_NAME) main.go
+	@go build -o $(BUILD_DIR)/$(APP_NAME)
 
 # Clean build artifacts
 .PHONY: clean
