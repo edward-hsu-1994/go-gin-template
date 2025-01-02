@@ -1,10 +1,12 @@
 package main
 
 import (
+	"github.com/gin-gonic/gin"
 	swaggerfiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
-	_ "go-fiber-template/docs"
+	docs "go-fiber-template/docs"
 	"go-fiber-template/helpers"
+	"strings"
 )
 
 // @title Go Gin Template
@@ -19,6 +21,31 @@ func main() {
 		panic(err)
 	}
 
+	// Setting hostname for swagger
+	alreadySettingSwaggerHostname := false
+	app.Use(func(c *gin.Context) {
+		if alreadySettingSwaggerHostname {
+			c.Next()
+			return
+		}
+
+		if strings.HasPrefix(c.FullPath(), "/swagger/") == false {
+			c.Next()
+			return
+		}
+
+		alreadySettingSwaggerHostname = true
+
+		hostname := c.GetHeader("X-Forwarded-Host")
+
+		if hostname == "" {
+			hostname = c.Request.Host
+		}
+
+		docs.SwaggerInfo.Host = hostname
+
+		c.Next()
+	})
 	app.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler)) // default
 
 	app.Use(helpers.RecoveryMiddleware())
